@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Environment Variables (CRITICAL)
+.env
+.env.local
+.env.*.local
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artifacts
+frontend/dist/
+backend/venv/
+backend/__pycache__/
