@@ -34,7 +34,7 @@ const LiveCharts: React.FC<LiveChartsProps> = ({ data }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* CPU Usage Chart */}
-      <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-lg">
+      <div className="glass-panel p-5">
         <h3 className="text-lg font-semibold text-slate-100 mb-4 flex items-center">
           <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
           CPU Usage (%)
@@ -82,7 +82,7 @@ const LiveCharts: React.FC<LiveChartsProps> = ({ data }) => {
       </div>
 
       {/* Memory Usage Chart */}
-      <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-lg">
+      <div className="glass-panel p-5">
         <h3 className="text-lg font-semibold text-slate-100 mb-4 flex items-center">
           <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
           Memory Usage (%)
@@ -130,7 +130,7 @@ const LiveCharts: React.FC<LiveChartsProps> = ({ data }) => {
       </div>
 
       {/* Requests & Errors Bar Chart */}
-      <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-lg lg:col-span-2">
+      <div className="glass-panel p-5 lg:col-span-2">
         <h3 className="text-lg font-semibold text-slate-100 mb-4 flex items-center">
           <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
           Traffic & Reliability

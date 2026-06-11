@@ -11,7 +11,9 @@ export const anomalyService = {
   async checkMetrics(projectId: string, metric: any) {
     const threshold = {
       cpu: 80,
-      memory: 90
+      memory: 90,
+      requests: 400, // Traffic threshold
+      errors: 3      // Error count threshold
     };
 
     let anomalyFound = false;
@@ -19,7 +21,18 @@ export const anomalyService = {
     let type = '';
     let severity: 'low' | 'medium' | 'high' | 'critical' = 'low';
 
-    if (metric.cpu > threshold.cpu) {
+    // Check application health first (most critical for users)
+    if (metric.errors > threshold.errors) {
+      anomalyFound = true;
+      type = 'HIGH_ERROR_RATE';
+      severity = 'critical';
+      description = `Critical application error rate detected: ${metric.errors} errors (Threshold: ${threshold.errors})`;
+    } else if (metric.requests > threshold.requests) {
+      anomalyFound = true;
+      type = 'TRAFFIC_SPIKE';
+      severity = 'high';
+      description = `Unusual traffic spike detected: ${metric.requests} requests/sec (Threshold: ${threshold.requests})`;
+    } else if (metric.cpu > threshold.cpu) {
       anomalyFound = true;
       type = 'CPU_SPIKE';
       severity = metric.cpu > 95 ? 'critical' : 'high';

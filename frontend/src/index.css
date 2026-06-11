@@ -23,6 +23,16 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(135deg, #020617 0%, #1e1b4b 50%, #020617 100%);
+  background-size: 200% 200%;
+  animation: gradientAnimation 15s ease infinite;
+  color: #e2e8f0;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 #root {
@@ -31,15 +41,19 @@ body {
 }
 
 @layer components {
+  .glass-panel {
+    @apply bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] rounded-xl;
+  }
+
   .card {
-    @apply bg-slate-800 rounded-lg shadow-lg p-6 border border-slate-700;
+    @apply glass-panel p-6;
   }
   
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-all shadow-lg shadow-blue-500/25 border border-white/10;
   }
   
   .btn-secondary {
-    @apply bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+    @apply bg-white/5 hover:bg-white/10 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-lg transition-all border border-white/10;
   }
 }

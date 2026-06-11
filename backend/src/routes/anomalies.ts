@@ -19,7 +19,7 @@ router.get('/:projectId', async (req: Request, res: Response) => {
       .limit(10);
 
     if (error) throw error;
-    return res.json(data || []);
+    return res.json({ anomalies: data || [] });
 
   } catch (error: any) {
     console.error('Anomalies Route Error:', error);

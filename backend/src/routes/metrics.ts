@@ -82,7 +82,7 @@ router.get('/:projectId', async (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Failed to fetch metrics' });
     }
 
-    return res.json(data);
+    return res.json({ metrics: data });
 
   } catch (error) {
     console.error('Metrics Fetch Error:', error);

@@ -1,56 +1,58 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
-import type { Project } from '../types'
-import { LogOut, Plus } from 'lucide-react'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import axios from "axios";
+import type { Project } from "../types";
+import { LogOut, Plus } from "lucide-react";
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
-  const navigate = useNavigate()
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL || "";
 
   useEffect(() => {
-    checkUser()
-    fetchProjects()
-  }, [])
+    checkUser();
+    fetchProjects();
+  }, []);
 
   const checkUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) {
-      navigate('/login')
+      navigate("/login");
     } else {
-      setUser(user)
+      setUser(user);
     }
-  }
+  };
 
   const fetchProjects = async () => {
     try {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      setProjects(data || [])
-    } catch (err) {
-      console.error('Error fetching projects:', err)
+      const response = await axios.get(`${apiUrl}/api/projects`);
+      setProjects(response.data.projects || []);
+    } catch (err: any) {
+      console.error(
+        "Error fetching projects:",
+        err.response?.data || err.message || err,
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    navigate('/login')
-  }
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Loading...</div>
       </div>
-    )
+    );
   }
 
   return (
@@ -58,14 +60,14 @@ export default function Projects() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Your Projects</h1>
-            <p className="text-slate-400">
-              {user?.email}
-            </p>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Your Projects
+            </h1>
+            <p className="text-slate-400">{user?.email}</p>
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => navigate('/projects/new')}
+              onClick={() => navigate("/projects/new")}
               className="btn-primary flex items-center gap-2"
             >
               <Plus size={20} />
@@ -85,7 +87,7 @@ export default function Projects() {
           <div className="card text-center py-12">
             <p className="text-slate-400 mb-4">No projects yet</p>
             <button
-              onClick={() => navigate('/projects/new')}
+              onClick={() => navigate("/projects/new")}
               className="btn-primary mx-auto"
             >
               Create Your First Project
@@ -111,5 +113,5 @@ export default function Projects() {
         )}
       </div>
     </div>
-  )
+  );
 }

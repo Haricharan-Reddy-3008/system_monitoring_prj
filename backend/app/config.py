@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     SLACK_WEBHOOK_URL: str = ""
     
     # CORS
-    CORS_ORIGINS: Any = ["http://localhost:5173", "http://localhost:3000"]
+    CORS_ORIGINS: Any = ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"]
     
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

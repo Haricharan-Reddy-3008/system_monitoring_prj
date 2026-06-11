@@ -49,7 +49,7 @@ router.get('/:projectId', async (req: Request, res: Response) => {
       .limit(50);
 
     if (error) throw error;
-    return res.json(data || []);
+    return res.json({ logs: data || [] });
 
   } catch (error: any) {
     console.error('Get Logs Error:', error);

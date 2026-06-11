@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routes import metrics, logs, predictions, anomalies, explanations
+from app.routes import metrics, logs, predictions, anomalies, explanations, projects
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -25,6 +25,7 @@ app.include_router(logs.router, prefix="/api", tags=["logs"])
 app.include_router(predictions.router, prefix="/api", tags=["predictions"])
 app.include_router(anomalies.router, prefix="/api", tags=["anomalies"])
 app.include_router(explanations.router, prefix="/api", tags=["explanations"])
+app.include_router(projects.router, prefix="/api", tags=["projects"])
 
 @app.get("/")
 async def root():
@@ -37,3 +38,5 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+# Force reload 2
