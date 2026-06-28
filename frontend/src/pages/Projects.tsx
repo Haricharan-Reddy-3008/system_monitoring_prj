@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import axios from "axios";
 import type { Project } from "../types";
-import { LogOut, Plus } from "lucide-react";
+import { BookOpen, Info, LogOut, Plus } from "lucide-react";
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -14,7 +14,6 @@ export default function Projects() {
 
   useEffect(() => {
     checkUser();
-    fetchProjects();
   }, []);
 
   const checkUser = async () => {
@@ -25,12 +24,16 @@ export default function Projects() {
       navigate("/login");
     } else {
       setUser(user);
+      fetchProjects(user.id);
     }
   };
 
-  const fetchProjects = async () => {
+  const fetchProjects = async (userId?: string) => {
     try {
-      const response = await axios.get(`${apiUrl}/api/projects`);
+      const url = userId
+        ? `${apiUrl}/api/projects?userId=${userId}`
+        : `${apiUrl}/api/projects`;
+      const response = await axios.get(url);
       setProjects(response.data.projects || []);
     } catch (err: any) {
       console.error(
@@ -58,14 +61,28 @@ export default function Projects() {
   return (
     <div className="min-h-screen bg-slate-900 p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">
               Your Projects
             </h1>
             <p className="text-slate-400">{user?.email}</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => navigate("/about")}
+              className="btn-secondary flex items-center gap-2"
+            >
+              <Info size={20} />
+              About
+            </button>
+            <button
+              onClick={() => navigate("/how-to-use")}
+              className="btn-secondary flex items-center gap-2"
+            >
+              <BookOpen size={20} />
+              How to Use
+            </button>
             <button
               onClick={() => navigate("/projects/new")}
               className="btn-primary flex items-center gap-2"

@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { supabase } from '../lib/supabase';
 import { aiService } from '../services/ai';
+import { anomalyService } from '../services/anomaly';
 
 const router = Router();
 
@@ -18,14 +19,16 @@ router.get('/:projectId', async (req: Request, res: Response) => {
       .select('cpu, memory, requests, errors, timestamp')
       .eq('project_id', projectId)
       .order('timestamp', { ascending: false })
-      .limit(20);
+      .limit(50);
 
     if (error || !metrics || metrics.length === 0) {
       return res.status(404).json({ error: 'No metrics data found to analyze' });
     }
 
-    // 2. Call Gemini AI Service
-    const prediction = await aiService.getPredictions(metrics);
+    const thresholds = await anomalyService.getThresholds(projectId);
+
+    // 2. Call Gemini AI Service, with a data-driven local fallback
+    const prediction = await aiService.getPredictions(metrics, thresholds);
 
     return res.json(prediction);
 

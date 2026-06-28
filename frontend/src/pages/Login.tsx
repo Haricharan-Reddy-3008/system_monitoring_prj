@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 export default function Login() {
@@ -33,24 +33,51 @@ export default function Login() {
   }
 
   const handleSignUp = async () => {
+    if (!email || !password) {
+      setError('Please enter both email and password')
+      return
+    }
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
     setLoading(true)
     setError('')
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       })
 
-      if (error) throw error
+      if (error) {
+        // Give friendly error messages for common Supabase errors
+        if (error.message.includes('rate limit')) {
+          throw new Error('Too many signup attempts. Please wait a few minutes and try again, or use an existing account.')
+        }
+        if (error.message.includes('invalid')) {
+          throw new Error('Please use a real email address (e.g. yourname@gmail.com). Test domains like @example.com are not allowed.')
+        }
+        throw error
+      }
 
-      setError('Check your email for the confirmation link!')
+      // If user is already confirmed (email confirmation disabled in Supabase),
+      // log them in and go straight to the dashboard
+      if (data.user && data.user.confirmed_at) {
+        navigate('/projects')
+        return
+      }
+
+      // If email confirmation is required, show clear instructions
+      setError('✅ Account created! Check your email inbox for a confirmation link. Click it, then come back and Sign In.')
     } catch (err: any) {
       setError(err.message || 'Failed to sign up')
     } finally {
       setLoading(false)
     }
   }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -123,6 +150,15 @@ export default function Login() {
         <p className="text-slate-500 text-sm text-center mt-6">
           Demo credentials will be provided after setup
         </p>
+
+        <div className="mt-5 flex justify-center gap-4 text-sm">
+          <Link to="/about" className="text-slate-400 hover:text-white">
+            About
+          </Link>
+          <Link to="/how-to-use" className="text-slate-400 hover:text-white">
+            How to Use
+          </Link>
+        </div>
       </div>
     </div>
   )

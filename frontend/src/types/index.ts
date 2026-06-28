@@ -9,6 +9,22 @@ export interface Project {
   name: string
   created_at: string
   updated_at: string
+  thresholds?: Thresholds
+}
+
+export interface Thresholds {
+  cpu: number
+  memory: number
+  requests: number
+  errors: number
+}
+
+export interface ThresholdRecommendation {
+  current: Thresholds
+  recommended: Thresholds
+  sampleCount: number
+  confidence: 'low' | 'medium' | 'high'
+  message: string
 }
 
 export interface Metric {

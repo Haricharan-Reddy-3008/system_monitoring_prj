@@ -52,12 +52,19 @@ const PredictionPanel: React.FC<PredictionPanelProps> = ({ prediction, loading }
       </div>
 
       {/* Prediction stats */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
           <p className="text-[10px] text-slate-500 uppercase font-bold">Predicted CPU</p>
           <div className="flex items-center gap-2">
             <span className="text-xl font-bold">{(prediction?.predicted_cpu ?? 0).toFixed(1)}%</span>
             {(prediction?.predicted_cpu ?? 0) > 70 ? <TrendingUp className="w-3 h-3 text-rose-400" /> : <TrendingDown className="w-3 h-3 text-emerald-400" />}
+          </div>
+        </div>
+        <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
+          <p className="text-[10px] text-slate-500 uppercase font-bold">Predicted Memory</p>
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold">{(prediction?.predicted_memory ?? 0).toFixed(1)}%</span>
+            {(prediction?.predicted_memory ?? 0) > 75 ? <TrendingUp className="w-3 h-3 text-rose-400" /> : <TrendingDown className="w-3 h-3 text-emerald-400" />}
           </div>
         </div>
         <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
